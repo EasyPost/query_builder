@@ -8,7 +8,8 @@ module QueryBuilder::CQL::Operators
     #
     # @example
     #   fn = Operators[:cql_literal]
-    #   fn[nil]      # => "NaN"
+    #   fn[nil]      # => "NULL"
+    #   fn["NaN"]    # => "NaN"
     #   fn["0x9232"] # => "0x9232"
     #   fn[:foo]     # => "'foo'"
     #
@@ -17,6 +18,7 @@ module QueryBuilder::CQL::Operators
     # @return [String]
     #
     def cql_literal(value)
+      return "NULL"                   if null?(value)
       return "NaN"                    if nan?(value)
       return "Infinity"               if infinity?(value)
       return value.to_s               if unchanged?(value)
@@ -48,8 +50,12 @@ module QueryBuilder::CQL::Operators
       "'#{value.to_s.gsub("\'", "\'\'")}'"
     end
 
+    def null?(value)
+      value.nil?
+    end
+
     def nan?(value)
-      value.nil? || value.to_s.eql?("NaN")
+      value.to_s.eql?("NaN")
     end
 
     def infinity?(value)

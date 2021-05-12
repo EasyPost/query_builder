@@ -7,7 +7,7 @@ describe QueryBuilder::CQL::Operators, ".cql_literal" do
 
   it_behaves_like :transforming_immutable_data do
     let(:input)  { nil }
-    let(:output) { "NaN" }
+    let(:output) { "NULL" }
   end
 
   it_behaves_like :transforming_immutable_data do
